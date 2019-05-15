@@ -68,14 +68,31 @@ func init() {
 	flag.Usage = func() {
 		message := `Usage: qrbak [options] keyid outdir
 
-qrbak exports a private key from gpg, encrypts it with AES256, encodes the
-ciphertext in base 64, creates QR codes from the base 64 text, and finally
-produces a PDF containing the QR codes. The QR codes are rendered in the PDF
-as a grid from left to right and from top to bottom.
+qrbak does the following:
+  1. Export a private key from gpg.
+  2. Encrypt the private key with AES256 (you will be prompted for a passphrase).
+  3. Encode the result of step 2 in base 64.
+  4. Split the result of step 3 into chunks and make a QR code for each chunk.
+  5. Create a PDF containing the QR codes, rendered in a grid from left to right
+     and top to bottom.
 
-To reconstruct the private key, scan each QR code, concatenate the text, decode
-the base 64 text, and finally decrypt using the same passphrase you gave when
-generating the PDF.
+  Steps 1-3 are equivalent to executing
+
+    gpg --export-secret-keys $KEY_ID | gpg --cipher-algo AES256 --symmetric | base64
+
+To reconstruct the private key and import it into gpg, follow these steps:
+  1. Scan each QR code.
+  2. Concatenate the content of the QR codes to get a single block of base 64 text.
+  3. Decode the base 64 text to get the encrypted private key.
+  4. Decrypt the output of step 3 using the same passphrase you gave when
+     generating the PDF.
+  5. Import the result into gpg using
+       gpg --import
+
+  If the result of step 2 above is in a file named b64.txt, this is equivalent
+  to executing
+
+    base64 --decode b64.txt | gpg --decrypt | gpg --import
 
 Positional arguments (required):
   keyid
