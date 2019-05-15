@@ -30,7 +30,7 @@ var (
 	pageSize    = pdf.PageSizeValue(pdf.Letter)
 )
 
-// fatalf calls fmt.Printf with the given arguments (adding a newline) and then exist with status 1.
+// fatalf calls fmt.Printf with the given arguments (adding a newline) and then exits with status 1.
 func fatalf(format string, a ...interface{}) {
 	fmt.Printf(format+"\n", a...)
 	os.Exit(1)
