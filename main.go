@@ -128,7 +128,7 @@ func parseFlags() error {
 func main() {
 	if err := parseFlags(); err != nil {
 		if err.Error() != "" {
-			fmt.Printf("%v\n", err)
+			fmt.Fprintf(flag.CommandLine.Output(), "%v\n", err)
 		}
 		flag.Usage()
 		os.Exit(2)
