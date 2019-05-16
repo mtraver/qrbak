@@ -76,7 +76,7 @@ func (p *PageSizeValue) Set(s string) error {
 	return nil
 }
 
-func New(pngs [][]byte, hash [sha256.Size]byte, fingerprint string, pageSize string, codesPerRow int) *fpdf.Fpdf {
+func New(pngs [][]byte, hash [sha256.Size]byte, fingerprint string, gpgVersion string, pageSize string, codesPerRow int) *fpdf.Fpdf {
 	pdf := fpdf.New("P", "mm", pageSize, "")
 
 	// Set up the footer.
@@ -87,7 +87,7 @@ func New(pngs [][]byte, hash [sha256.Size]byte, fingerprint string, pageSize str
 		fs := fontSize(pageSize)
 
 		pdf.SetFont("Arial", "", fs)
-		text := fmt.Sprintf("Fingerprint: %s\nSHA256 of QR-encoded data: %x\n%s | Page %d of {nb}", fingerprint, hash, currTime, pdf.PageNo())
+		text := fmt.Sprintf("Fingerprint: %s\nSHA256 of QR-encoded data: %x\n%s | %s | Page %d of {nb}", fingerprint, hash, currTime, gpgVersion, pdf.PageNo())
 		pdf.MultiCell(0, fs*mmPerPoint, text, "", "C", false)
 	})
 	pdf.AliasNbPages("")

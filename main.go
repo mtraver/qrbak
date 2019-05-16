@@ -155,6 +155,11 @@ func main() {
 		fatalf("gpg is not installed")
 	}
 
+	gpgVersion, err := gpg.Version()
+	if err != nil {
+		fatalf("Failed to get gpg version")
+	}
+
 	key, err := gpg.ExportPrivateKey(keyID)
 	if err != nil {
 		fatalf("Failed to export private key: %v", err)
@@ -208,7 +213,7 @@ func main() {
 		}
 	}
 
-	doc := pdf.New(pngs, sha256.Sum256([]byte(encb64)), fingerprint, string(pageSize), codesPerRow)
+	doc := pdf.New(pngs, sha256.Sum256([]byte(encb64)), fingerprint, gpgVersion, string(pageSize), codesPerRow)
 	pdfFilename := filenameBase + ".pdf"
 	vprintf("Writing %s\n", pdfFilename)
 	if err := doc.OutputFileAndClose(path.Join(outDir, pdfFilename)); err != nil {

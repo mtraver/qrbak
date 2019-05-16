@@ -13,6 +13,22 @@ func Installed() bool {
 	return err == nil
 }
 
+// Version returns the version of gpg currently installed.
+func Version() (string, error) {
+	out, err := exec.Command("gpg", "--version").Output()
+	if err != nil {
+		return "", err
+	} else if len(out) == 0 {
+		return "", fmt.Errorf("gpg: output empty")
+	}
+
+	if parts := strings.SplitN(string(out), "\n", 2); len(parts) > 1 {
+		return parts[0], nil
+	}
+
+	return "", fmt.Errorf("gpg: failed to get version")
+}
+
 // Fingerprint returns the fingerprint for the given key ID. It shells out to gpg to do this.
 func Fingerprint(keyID string) (string, error) {
 	out, err := exec.Command("gpg", "--with-colons", "--fingerprint", keyID).Output()
