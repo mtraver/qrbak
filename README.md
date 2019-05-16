@@ -71,5 +71,4 @@ Options:
   -txt
       save a text file containing the encrypted, base 64-encoded key in addition to a PDF
   -v  verbose output
-
 ```
