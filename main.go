@@ -66,7 +66,7 @@ func split(s string, n int) []string {
 
 func init() {
 	flag.Usage = func() {
-		message := `Usage: qrbak [options] keyid outdir
+		message := `usage: qrbak [options] keyid outdir
 
 qrbak does the following:
   1. Export a private key from gpg.
