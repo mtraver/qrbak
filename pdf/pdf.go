@@ -3,11 +3,9 @@ package pdf
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"fmt"
 	"sort"
 	"strings"
-	"time"
 
 	fpdf "github.com/jung-kurt/gofpdf"
 )
@@ -18,8 +16,6 @@ const (
 	A5     = fpdf.PageSizeA5
 	Legal  = fpdf.PageSizeLegal
 	Letter = fpdf.PageSizeLetter
-
-	timeFormat = "2006-01-02 15:04:05 MST"
 
 	// In reality there are 0.353 mm per point. But this is used for line spacing, and using a slightly
 	// larger value makes the line spacing more visually appealing.
@@ -76,18 +72,18 @@ func (p *PageSizeValue) Set(s string) error {
 	return nil
 }
 
-func New(pngs [][]byte, hash [sha256.Size]byte, fingerprint string, gpgVersion string, pageSize string, codesPerRow int) *fpdf.Fpdf {
+type FooterFunc func(pageNumber int) string
+
+func New(pngs [][]byte, pageSize string, codesPerRow int, footerFunc FooterFunc) *fpdf.Fpdf {
 	pdf := fpdf.New("P", "mm", pageSize, "")
 
 	// Set up the footer.
-	currTime := time.Now().Format(timeFormat)
 	pdf.SetFooterFunc(func() {
-		pdf.SetY(-20)
-
+		text := footerFunc(pdf.PageNo())
 		fs := fontSize(pageSize)
 
+		pdf.SetY(-20)
 		pdf.SetFont("Arial", "", fs)
-		text := fmt.Sprintf("Fingerprint: %s\nSHA256 of QR-encoded data: %x\n%s | %s | Page %d of {nb}", fingerprint, hash, currTime, gpgVersion, pdf.PageNo())
 		pdf.MultiCell(0, fs*mmPerPoint, text, "", "C", false)
 	})
 	pdf.AliasNbPages("")

@@ -11,12 +11,15 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	qrcode "github.com/skip2/go-qrcode"
 
 	"github.com/mtraver/qrbak/gpg"
 	"github.com/mtraver/qrbak/pdf"
 )
+
+const timeFormat = "2006-01-02 15:04:05 MST"
 
 var (
 	keyID  string
@@ -213,7 +216,13 @@ func main() {
 		}
 	}
 
-	doc := pdf.New(pngs, sha256.Sum256([]byte(encb64)), fingerprint, gpgVersion, string(pageSize), codesPerRow)
+	currTime := time.Now().Format(timeFormat)
+	hash := sha256.Sum256([]byte(encb64))
+	footerFunc := func(pageNumber int) string {
+		return fmt.Sprintf("Fingerprint: %s\nSHA256 of QR-encoded data: %x\n%s | %s | Page %d of {nb}", fingerprint, hash, currTime, gpgVersion, pageNumber)
+	}
+
+	doc := pdf.New(pngs, string(pageSize), codesPerRow, footerFunc)
 	pdfFilename := filenameBase + ".pdf"
 	vprintf("Writing %s\n", pdfFilename)
 	if err := doc.OutputFileAndClose(path.Join(outDir, pdfFilename)); err != nil {
