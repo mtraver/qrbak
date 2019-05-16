@@ -107,7 +107,7 @@ Options:
 	}
 
 	flag.BoolVar(&verbose, "v", false, "verbose output")
-	flag.BoolVar(&saveImages, "img", false, "generate PNGs, one per QR code, in addition to a PDF")
+	flag.BoolVar(&saveImages, "img", false, "save PNGs, one per QR code, in addition to a PDF")
 	flag.BoolVar(&saveTxt, "txt", false, "save a text file containing the encrypted, base 64-encoded key in addition to a PDF")
 	flag.Var(&pageSize, "pagesize", "PDF page size")
 	flag.IntVar(&numQRCodes, "codes", 27, "number of QR codes to generate")
