@@ -74,7 +74,7 @@ func (p *PageSizeValue) Set(s string) error {
 
 type FooterFunc func(pageNumber int) string
 
-func New(pngs [][]byte, pageSize string, codesPerRow int, footerFunc FooterFunc) *fpdf.Fpdf {
+func New(pngs [][]byte, codesPerRow int, pageSize string, footerFunc FooterFunc) *fpdf.Fpdf {
 	pdf := fpdf.New("P", "mm", pageSize, "")
 
 	// Set up the footer.

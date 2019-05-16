@@ -222,7 +222,7 @@ func main() {
 		return fmt.Sprintf("Fingerprint: %s\nSHA256 of QR-encoded data: %x\n%s | %s | Page %d of {nb}", fingerprint, hash, currTime, gpgVersion, pageNumber)
 	}
 
-	doc := pdf.New(pngs, string(pageSize), codesPerRow, footerFunc)
+	doc := pdf.New(pngs, codesPerRow, string(pageSize), footerFunc)
 	pdfFilename := filenameBase + ".pdf"
 	vprintf("Writing %s\n", pdfFilename)
 	if err := doc.OutputFileAndClose(path.Join(outDir, pdfFilename)); err != nil {
