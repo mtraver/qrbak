@@ -1,8 +1,9 @@
 package main
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/kylelemons/godebug/pretty"
 )
 
 func TestSplit(t *testing.T) {
@@ -65,8 +66,8 @@ func TestSplit(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
 			got := split(c.s, c.n)
-			if !reflect.DeepEqual(got, c.want) {
-				t.Errorf("got %v, want %v", got, c.want)
+			if diff := pretty.Compare(got, c.want); diff != "" {
+				t.Errorf("Unexpected result (-got +want):\n%s", diff)
 			}
 		})
 	}
