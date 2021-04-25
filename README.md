@@ -61,7 +61,7 @@ Positional arguments (required):
 
 Options:
   -codes int
-      number of QR codes to generate (default 27)
+      number of QR codes to generate (default 36)
   -img
       save PNGs, one per QR code, in addition to a PDF
   -pagesize value
