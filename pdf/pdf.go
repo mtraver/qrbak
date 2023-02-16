@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	fpdf "github.com/jung-kurt/gofpdf"
+	fpdf "github.com/jung-kurt/gofpdf/v2"
 )
 
 const (
